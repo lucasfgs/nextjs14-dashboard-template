@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import AuthenticatorProvider from "@/components/providers/authenticator";
+import { ThemeProvider } from "@/components/providers/theme";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -24,7 +25,14 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        <AuthenticatorProvider>{children}</AuthenticatorProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthenticatorProvider>{children}</AuthenticatorProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

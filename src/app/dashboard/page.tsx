@@ -16,6 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import withAuth from "@/utils/withAuth";
 import * as Auth from "aws-amplify/auth";
 import { Loader2 } from "lucide-react";
@@ -49,6 +50,7 @@ const Dashboard = () => {
             <MainNav className="mx-6" />
             <div className="ml-auto flex items-center space-x-4">
               <Search />
+              <ThemeSwitcher />
               <UserNav />
             </div>
           </div>
