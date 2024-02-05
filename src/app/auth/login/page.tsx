@@ -36,20 +36,6 @@ export default function Login() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const user = await Auth.getCurrentUser();
-        if (user) {
-          router.push("/dashboard");
-        }
-      } catch (error) {
-        // User is not logged in
-      }
-    };
-    checkUser();
-  }, [router, user]);
-
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,6 +55,12 @@ export default function Login() {
       if (user.isSignedIn) {
         router.push("/dashboard");
       }
+
+      switch (user.nextStep.signInStep) {
+        case "CONFIRM_SIGN_UP":
+          router.push(`/auth/confirm-email?email=${values.email}`);
+          break;
+      }
     } catch (error: any) {
       toast.error("Invalid username or password");
       console.error("ERROR: ", error);
@@ -85,7 +77,7 @@ export default function Login() {
           Enter your credentials below to access our platform
         </p>
       </div>
-      <div className={"grid gap-4"}>
+      <div className="grid gap-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid gap-4">
@@ -117,7 +109,17 @@ export default function Login() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="password">Password</FormLabel>
+                      <div className="flex justify-between items-center">
+                        <FormLabel htmlFor="password">Password</FormLabel>
+
+                        <Link
+                          href={"/auth/forgot-password"}
+                          className="underline-offset-4 text-primary hover:opacity-70 hover:underline text-sm"
+                        >
+                          Forgot password?
+                        </Link>
+                      </div>
+
                       <FormControl>
                         <Input
                           id="password"

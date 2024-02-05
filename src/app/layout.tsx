@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import AuthenticatorProvider from "@/components/providers/authenticator";
 import { ThemeProvider } from "@/components/providers/theme";
+import "@/utils/aws/Amplify";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 

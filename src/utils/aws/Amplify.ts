@@ -1,4 +1,6 @@
 import { Amplify } from "aws-amplify";
+import { cognitoUserPoolsTokenProvider } from "aws-amplify/auth/cognito";
+import { CookieStorage } from "aws-amplify/utils";
 
 Amplify.configure({
   Auth: {
@@ -13,3 +15,5 @@ Amplify.configure({
     },
   },
 });
+
+cognitoUserPoolsTokenProvider.setKeyValueStorage(new CookieStorage({}));

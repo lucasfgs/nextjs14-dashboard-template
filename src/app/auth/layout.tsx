@@ -1,16 +1,25 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import * as Auth from "aws-amplify/auth";
+import { redirect } from "next/navigation";
+import { validateAuthenticatedUser } from "@/utils/aws/validateAuthenticatedUser";
 
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication page",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const authenticatedUser = await validateAuthenticatedUser();
+
+  if (authenticatedUser) {
+    redirect("/dashboard");
+  }
+
   return (
     <>
       <main className="min-h-screen bg-background font-sans antialiased">
