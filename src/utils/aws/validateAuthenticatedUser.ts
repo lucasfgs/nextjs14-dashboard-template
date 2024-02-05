@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
 // Verifier that expects valid access tokens:
 const verifier = CognitoJwtVerifier.create({

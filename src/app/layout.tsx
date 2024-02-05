@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import AuthenticatorProvider from "@/components/providers/authenticator";
 import { ThemeProvider } from "@/components/providers/theme";
 import "@/utils/aws/Amplify";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         >
           <AuthenticatorProvider>{children}</AuthenticatorProvider>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

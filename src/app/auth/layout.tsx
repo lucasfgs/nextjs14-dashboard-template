@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { Toaster } from "@/components/ui/sonner";
-import * as Auth from "aws-amplify/auth";
 import { redirect } from "next/navigation";
 import { validateAuthenticatedUser } from "@/utils/aws/validateAuthenticatedUser";
 
@@ -44,7 +42,6 @@ export default async function RootLayout({
           <div className="lg:p-8">{children}</div>
         </div>
       </main>
-      <Toaster />
     </>
   );
 }
