@@ -59,6 +59,7 @@ export default function Login() {
         router.push("/dashboard");
       }
     } catch (error: any) {
+      toast.error("Invalid code provided, please request a code again.");
       console.error("ERROR: ", error);
     } finally {
       setIsLoading(false);
