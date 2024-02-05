@@ -1,17 +1,15 @@
 "use client";
 
 import { Loader } from "lucide-react";
-
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/ui/icons";
 import Link from "next/link";
 import * as Auth from "aws-amplify/auth";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
 import {
   Form,
   FormControl,
@@ -20,8 +18,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Icons } from "@/components/ui/icons";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const formSchema = z
   .object({

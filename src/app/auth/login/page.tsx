@@ -1,6 +1,19 @@
 "use client";
 import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAuthenticator } from "@aws-amplify/ui-react";
+import "@aws-amplify/ui-react/styles.css";
+import * as Auth from "aws-amplify/auth";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
+import { Icons } from "@/components/ui/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -9,19 +22,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useAuthenticator } from "@aws-amplify/ui-react";
-import "@aws-amplify/ui-react/styles.css";
-import * as Auth from "aws-amplify/auth";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
-import { Icons } from "@/components/ui/icons";
-import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string().email(),

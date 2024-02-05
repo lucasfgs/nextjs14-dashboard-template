@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+
 import { MainNav } from "@/components/pages/dashboard/main-nav";
 import { Search } from "@/components/pages/dashboard/search";
 import TeamSwitcher from "@/components/pages/dashboard/team-switcher";
 import { UserNav } from "@/components/pages/dashboard/user-nav";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import { validateAuthenticatedUser } from "@/utils/aws/validateAuthenticatedUser";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Authentication",

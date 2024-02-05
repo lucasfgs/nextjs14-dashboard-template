@@ -1,16 +1,5 @@
 "use client";
 import * as z from "zod";
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -20,8 +9,17 @@ import "@aws-amplify/ui-react/styles.css";
 import * as Auth from "aws-amplify/auth";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { Icons } from "@/components/ui/icons";
-import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 const formSchema = z.object({
   confirmationCode: z.string().min(6),

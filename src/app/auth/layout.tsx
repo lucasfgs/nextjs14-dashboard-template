@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+
 import { validateAuthenticatedUser } from "@/utils/aws/validateAuthenticatedUser";
 
 export const metadata: Metadata = {
