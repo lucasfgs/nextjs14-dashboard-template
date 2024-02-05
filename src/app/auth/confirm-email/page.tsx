@@ -3,8 +3,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useAuthenticator } from "@aws-amplify/ui-react";
+import { useState } from "react";
 import "@aws-amplify/ui-react/styles.css";
 import * as Auth from "aws-amplify/auth";
 import { toast } from "sonner";
@@ -29,24 +28,9 @@ type FormSchema = z.infer<typeof formSchema>;
 
 export default function Login() {
   const router = useRouter();
-  const { user } = useAuthenticator((context) => [context.user]);
   const searchParams = useSearchParams();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const user = await Auth.getCurrentUser();
-        if (user) {
-          router.push("/dashboard");
-        }
-      } catch (error) {
-        // User is not logged in
-      }
-    };
-    checkUser();
-  }, [router, user]);
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -65,12 +49,15 @@ export default function Login() {
         return router.push("/auth/login");
       }
 
-      await Auth.confirmSignUp({
+      const confirmedUser = await Auth.confirmSignUp({
         username: email,
         confirmationCode: values.confirmationCode,
       });
 
-      router.push("/dashboard");
+      if (confirmedUser.isSignUpComplete) {
+        await Auth.autoSignIn();
+        router.push("/dashboard");
+      }
     } catch (error: any) {
       console.error("ERROR: ", error);
     } finally {

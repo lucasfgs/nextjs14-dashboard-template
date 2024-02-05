@@ -62,12 +62,16 @@ export default function Register() {
       const user = await Auth.signUp({
         username: values.email,
         password: values.password,
+        options: {
+          userAttributes: {},
+          autoSignIn: true,
+        },
       });
       if (user) {
         router.push("/auth/login");
       }
     } catch (error: any) {
-      toast.error("Invalid username or password");
+      toast.error("An account with the given email already exists.");
       console.error("ERROR: ", error);
     } finally {
       setIsLoading(false);

@@ -3,8 +3,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useAuthenticator } from "@aws-amplify/ui-react";
+import { useState } from "react";
 import "@aws-amplify/ui-react/styles.css";
 import * as Auth from "aws-amplify/auth";
 import { Loader2 } from "lucide-react";
@@ -52,26 +51,11 @@ type ConfirmForgotPasswordCodeSchema = z.infer<
 
 export default function Login() {
   const router = useRouter();
-  const { user } = useAuthenticator((context) => [context.user]);
 
   const [shouldConfirmPasswordCode, setShouldConfirmPasswordCode] =
     useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const user = await Auth.getCurrentUser();
-        if (user) {
-          router.push("/dashboard");
-        }
-      } catch (error) {
-        // User is not logged in
-      }
-    };
-    checkUser();
-  }, [router, user]);
 
   const forgotPasswordForm = useForm<ForgotPasswordFormSchema>({
     resolver: zodResolver(forgotPasswodFormSchema),

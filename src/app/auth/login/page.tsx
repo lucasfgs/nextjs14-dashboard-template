@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import * as Auth from "aws-amplify/auth";
 import { toast } from "sonner";
@@ -32,7 +31,6 @@ type FormSchema = z.infer<typeof formSchema>;
 
 export default function Login() {
   const router = useRouter();
-  const { user } = useAuthenticator((context) => [context.user]);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
