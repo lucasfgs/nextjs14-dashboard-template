@@ -25,7 +25,7 @@ export default function Dashboard() {
           </div>
         </div>
         <Tabs defaultValue="overview" className="space-y-4">
-          <div className="overflow-scroll">
+          <div className="overflow-scroll sm:overflow-auto">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="analytics" disabled>
