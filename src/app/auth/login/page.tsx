@@ -56,7 +56,9 @@ export default function Login() {
 
       switch (user.nextStep.signInStep) {
         case "CONFIRM_SIGN_UP":
-          router.push(`/auth/confirm-email?email=${values.email}`);
+          router.push(
+            `/auth/confirm-email?email=${encodeURIComponent(values.email)}`
+          );
           break;
       }
     } catch (error: any) {

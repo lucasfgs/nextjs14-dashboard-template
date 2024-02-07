@@ -8,6 +8,7 @@ import { UserNav } from "@/components/pages/dashboard/user-nav";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import { validateAuthenticatedUser } from "@/utils/aws/validateAuthenticatedUser";
 import HamburgerMenu from "@/components/pages/dashboard/hamburger-menu";
+import Transition from "@/components/pages/dashboard/transition";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -26,7 +27,7 @@ export default async function RootLayout({
   }
 
   return (
-    <>
+    <Transition>
       <div className="flex-col md:flex">
         <div className="border-b">
           <div className="flex h-16 items-center px-4">
@@ -44,6 +45,6 @@ export default async function RootLayout({
         </div>
         {children}
       </div>
-    </>
+    </Transition>
   );
 }
