@@ -7,6 +7,7 @@ import TeamSwitcher from "@/components/pages/dashboard/team-switcher";
 import { UserNav } from "@/components/pages/dashboard/user-nav";
 import { ThemeSwitcher } from "@/components/ui/theme-switcher";
 import { validateAuthenticatedUser } from "@/utils/aws/validateAuthenticatedUser";
+import HamburgerMenu from "@/components/pages/dashboard/hamburger-menu";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -29,12 +30,15 @@ export default async function RootLayout({
       <div className="flex-col md:flex">
         <div className="border-b">
           <div className="flex h-16 items-center px-4">
-            <TeamSwitcher />
+            <TeamSwitcher className="hidden md:flex" />
             <MainNav className="mx-6" />
-            <div className="ml-auto flex items-center space-x-4">
+            <div className="hidden ml-auto md:flex items-center space-x-4">
               <Search />
               <ThemeSwitcher />
               <UserNav />
+            </div>
+            <div className="flex md:hidden ml-auto">
+              <HamburgerMenu />
             </div>
           </div>
         </div>
