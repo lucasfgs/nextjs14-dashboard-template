@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
+import { JwtExpiredError } from "aws-jwt-verify/error";
 
 // Verifier that expects valid access tokens:
 const verifier = CognitoJwtVerifier.create({
@@ -7,16 +8,6 @@ const verifier = CognitoJwtVerifier.create({
   tokenUse: "access",
   clientId: process.env.COGNITO_APP_CLIENT_ID as string,
 });
-
-async function verifyJWT(token: string) {
-  try {
-    const payload = await verifier.verify(token);
-
-    return payload;
-  } catch {
-    return null;
-  }
-}
 
 function getTokenFromCookies(): string | null {
   const cookieStore = cookies();
@@ -49,5 +40,12 @@ export async function validateAuthenticatedUser() {
     return null;
   }
 
-  return await verifyJWT(token);
+  try {
+    return await verifier.verify(token);
+  } catch (error) {
+    if (error instanceof JwtExpiredError) {
+      return "ACCESS_TOKEN_EXPIRED";
+    }
+    return null;
+  }
 }
