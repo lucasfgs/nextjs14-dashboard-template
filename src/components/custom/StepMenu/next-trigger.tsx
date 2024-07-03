@@ -1,6 +1,6 @@
-import { Button, ButtonProps } from "@/components/ui/button";
-
 import { useStepMenu } from "./context";
+
+import { Button, ButtonProps } from "@/components/ui/button";
 
 interface StepMenuNextTriggerProps extends ButtonProps {
   children: React.ReactNode;
