@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Authenticator } from "@aws-amplify/ui-react";
 
 import { configureAmplifyAuth } from "@/utils/aws/Amplify";
@@ -12,9 +12,20 @@ interface AuthenticatorProviderProps {
 export default function AuthenticatorProvider({
   children,
 }: AuthenticatorProviderProps) {
+  const [authEnabled, setAuthEnabled] = useState(false);
+
   useEffect(() => {
-    configureAmplifyAuth();
+    try {
+      configureAmplifyAuth();
+      setAuthEnabled(true);
+    } catch {
+      setAuthEnabled(false);
+    }
   }, []);
+
+  if (!authEnabled) {
+    return <>{children}</>;
+  }
 
   return <Authenticator.Provider>{children}</Authenticator.Provider>;
 }

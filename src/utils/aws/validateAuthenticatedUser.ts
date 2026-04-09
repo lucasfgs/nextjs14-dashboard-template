@@ -39,9 +39,20 @@ function getVerifier() {
 
 function getTokenFromCookies(clientId: string): string | null {
   const cookieStore = cookies();
-  const accessTokenCookieName = `CognitoIdentityServiceProvider.${clientId}.accessToken`;
+  const cookieNames = [
+    `CognitoIdentityServiceProvider.${clientId}.accessToken`,
+    `CognitoIdentityServiceProvider.${clientId}.LastAuthUser`,
+  ];
 
-  return cookieStore.get(accessTokenCookieName)?.value ?? null;
+  for (const cookieName of cookieNames) {
+    const token = cookieStore.get(cookieName)?.value;
+
+    if (token) {
+      return token;
+    }
+  }
+
+  return null;
 }
 
 export async function validateAuthenticatedUser() {

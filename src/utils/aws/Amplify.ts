@@ -17,6 +17,10 @@ function requireCognitoConfig() {
   return { userPoolId, userPoolClientId };
 }
 
+export function isAmplifyAuthConfigured() {
+  return isConfigured;
+}
+
 export function configureAmplifyAuth() {
   if (isConfigured) {
     return;
