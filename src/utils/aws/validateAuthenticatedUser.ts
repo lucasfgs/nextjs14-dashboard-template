@@ -2,46 +2,79 @@ import { cookies } from "next/headers";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { JwtExpiredError } from "aws-jwt-verify/error";
 
-// Verifier that expects valid access tokens:
-const verifier = CognitoJwtVerifier.create({
-  userPoolId: process.env.COGNITO_POOL_ID as string,
-  tokenUse: "access",
-  clientId: process.env.COGNITO_APP_CLIENT_ID as string,
-});
+let verifier:
+  | ReturnType<typeof CognitoJwtVerifier.create>
+  | null = null;
 
-function getTokenFromCookies(): string | null {
-  const cookieStore = cookies();
+function getCognitoConfig() {
+  const userPoolId = process.env.COGNITO_POOL_ID;
+  const clientId = process.env.COGNITO_APP_CLIENT_ID;
 
-  const storedCookies = cookieStore.getAll();
+  if (!userPoolId || !clientId) {
+    return null;
+  }
 
-  const token = storedCookies.find((cookie) => {
-    if (
-      !cookie.name.includes(
-        `CognitoIdentityServiceProvider.${process.env.COGNITO_APP_CLIENT_ID}.`
-      )
-    ) {
-      return null;
-    }
+  return { userPoolId, clientId };
+}
 
-    return cookie.name.includes("accessToken") ? cookie.value : null;
+function getVerifier() {
+  if (verifier) {
+    return verifier;
+  }
+
+  const config = getCognitoConfig();
+
+  if (!config) {
+    return null;
+  }
+
+  verifier = CognitoJwtVerifier.create({
+    userPoolId: config.userPoolId,
+    tokenUse: "access",
+    clientId: config.clientId,
   });
+
+  return verifier;
+}
+
+function getTokenFromCookies(clientId: string): string | null {
+  const cookieStore = cookies();
+  const cookieNames = [
+    `CognitoIdentityServiceProvider.${clientId}.accessToken`,
+  ];
+
+  for (const cookieName of cookieNames) {
+    const token = cookieStore.get(cookieName)?.value;
+
+    if (token) {
+      return token;
+    }
+  }
+
+  return null;
+}
+
+export async function validateAuthenticatedUser() {
+  const config = getCognitoConfig();
+
+  if (!config) {
+    return null;
+  }
+
+  const token = getTokenFromCookies(config.clientId);
 
   if (!token) {
     return null;
   }
 
-  return token.value;
-}
+  const jwtVerifier = getVerifier();
 
-export async function validateAuthenticatedUser() {
-  const token = await getTokenFromCookies();
-
-  if (!token) {
+  if (!jwtVerifier) {
     return null;
   }
 
   try {
-    return await verifier.verify(token);
+    return await jwtVerifier.verify(token);
   } catch (error) {
     if (error instanceof JwtExpiredError) {
       return "ACCESS_TOKEN_EXPIRED";
