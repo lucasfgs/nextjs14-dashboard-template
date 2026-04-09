@@ -2,39 +2,32 @@ import { cookies } from "next/headers";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { JwtExpiredError } from "aws-jwt-verify/error";
 
-// Verifier that expects valid access tokens:
+const userPoolId = process.env.COGNITO_POOL_ID;
+const clientId = process.env.COGNITO_APP_CLIENT_ID;
+
+if (!userPoolId || !clientId) {
+  throw new Error("Missing Cognito environment variables.");
+}
+
 const verifier = CognitoJwtVerifier.create({
-  userPoolId: process.env.COGNITO_POOL_ID as string,
+  userPoolId,
   tokenUse: "access",
-  clientId: process.env.COGNITO_APP_CLIENT_ID as string,
+  clientId,
 });
 
 function getTokenFromCookies(): string | null {
+  const tokenPrefix = `CognitoIdentityServiceProvider.${clientId}.`;
   const cookieStore = cookies();
 
-  const storedCookies = cookieStore.getAll();
-
-  const token = storedCookies.find((cookie) => {
-    if (
-      !cookie.name.includes(
-        `CognitoIdentityServiceProvider.${process.env.COGNITO_APP_CLIENT_ID}.`
-      )
-    ) {
-      return null;
-    }
-
-    return cookie.name.includes("accessToken") ? cookie.value : null;
+  const token = cookieStore.getAll().find((cookie) => {
+    return cookie.name.includes(tokenPrefix) && cookie.name.includes("accessToken");
   });
 
-  if (!token) {
-    return null;
-  }
-
-  return token.value;
+  return token?.value ?? null;
 }
 
 export async function validateAuthenticatedUser() {
-  const token = await getTokenFromCookies();
+  const token = getTokenFromCookies();
 
   if (!token) {
     return null;

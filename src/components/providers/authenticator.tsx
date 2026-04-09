@@ -2,8 +2,6 @@
 
 import { Authenticator } from "@aws-amplify/ui-react";
 
-import "@/utils/aws/Amplify";
-
 interface AuthenticatorProviderProps {
   children: React.ReactNode;
 }
