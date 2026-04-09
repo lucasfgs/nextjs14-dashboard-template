@@ -41,7 +41,6 @@ function getTokenFromCookies(clientId: string): string | null {
   const cookieStore = cookies();
   const cookieNames = [
     `CognitoIdentityServiceProvider.${clientId}.accessToken`,
-    `CognitoIdentityServiceProvider.${clientId}.LastAuthUser`,
   ];
 
   for (const cookieName of cookieNames) {
